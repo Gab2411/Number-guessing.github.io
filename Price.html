@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Information</title>
+    <style>
+        /* Basic CSS for styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #0cc0df;
+            color: #231f20;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+            background-color: #fff;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: calc(100% - 18px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #fff;
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            width: 50%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            margin: 0 auto; /* Center the button horizontally */
+            display: block; /* Ensure the button takes up the full width */
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <form id="productForm" onsubmit="return false;">
+        <table>
+            <tr>
+                <th>Product and Service</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td><label for="productName">Product Name:</label></td>
+                <td>
+                    <select id="productName" name="productName" onchange="updateProductDetails()" required>
+                        <option value="" disabled selected>Select Product</option>
+                        <option value="Champion Powder">Champion Powder</option>
+                        <option value="Zonrox Colorsafe">Zonrox Colorsafe</option>
+                        <option value="Tide Powder">Tide Powder</option>
+                        <option value="Ariel">Ariel</option>
+                        <option value="Downy Blue">Downy Blue</option>
+                        <option value="Downy Pink">Downy Pink</option>
+                        <option value="Downy Red">Downy Red</option>
+                        <option value="Del Blue">Del Blue</option>
+                        <option value="Del Pink">Del Pink</option>
+                        <option value="Calla Powder">Calla Powder</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="unitPrice">Unit Price:</label></td>
+                <td><input type="text" id="unitPrice" name="unitPrice" readonly></td>
+            </tr>
+            <tr>
+                <td><label for="serviceType">Service Type:</label></td>
+                <td>
+                    <select id="serviceType" name="serviceType" onchange="updateServiceDescription()" required>
+                        <option value="" disabled selected>Select Service Type</option>
+                        <option value="washing">Washing Service</option>
+                        <option value="drying">Drying Service</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="serviceDescription">Service Description:</label></td>
+                <td>
+                    <select id="serviceDescription" name="serviceDescription" onchange="updatePrice()" required>
+                        <option value="" disabled selected>Select Service Description</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="price">Price:</label></td>
+                <td><input type="number" id="price" name="price" step="0.01" readonly></td>
+            </tr>
+        </table>
+        <input type="submit" value="Add Product">
+    </form>
+
+    <script>
+        function updateProductDetails() {
+            var productName = document.getElementById("productName").value;
+            var unitPriceInput = document.getElementById("unitPrice");
+            var serviceTypeSelect = document.getElementById("serviceType");
+
+            // Set unit price based on selected product
+            switch (productName) {
+                case "Champion Powder":
+                case "Downy Blue":
+                case "Downy Pink":
+                case "Downy Red":
+                case "Del Blue":
+                case "Del Pink":
+                    unitPriceInput.value = "10";
+                    break;
+                case "Zonrox Colorsafe":
+                    unitPriceInput.value = "20";
+                    break;
+                case "Tide Powder":
+                case "Ariel":
+                case "Calla Powder":
+                    unitPriceInput.value = "15";
+                    break;
+                default:
+                    unitPriceInput.value = "";
+                    break;
+            }
+
+            // Set service type based on selected product
+            switch (productName) {
+                case "Champion Powder":
+                case "Zonrox Colorsafe":
+                case "Tide Powder":
+                case "Ariel":
+                case "Calla Powder":
+                    serviceTypeSelect.value = "washing";
+                    break;
+                case "Downy Blue":
+                case "Downy Pink":
+                case "Downy Red":
+                case "Del Blue":
+                case "Del Pink":
+                    serviceTypeSelect.value = "drying";
+                    break;
+                default:
+                    serviceTypeSelect.value = "";
+                    break;
+            }
+
+            // Update service description options based on service type
+            updateServiceDescription();
+        }
+
+        function updateServiceDescription() {
+            var serviceTypeSelect = document.getElementById("serviceType");
+            var serviceDescriptionSelect = document.getElementById("serviceDescription");
+
+            // Clear previous options
+            serviceDescriptionSelect.innerHTML = '';
+
+            // Add options based on selected service type
+            switch (serviceTypeSelect.value) {
+                case "washing":
+                    var washingOptions = ["Regular Wash", "Quick Wash", "Delicate Wash"];
+                    washingOptions.forEach(function(option) {
+                        var optionElement = document.createElement("option");
+                        optionElement.value = option;
+                        optionElement.textContent = option;
+                        serviceDescriptionSelect.appendChild(optionElement);
+                    });
+                    break;
+                case "drying":
+                    var dryingOptions = ["40 minutes dry", "30 minutes dry"];
+                    dryingOptions.forEach(function(option) {
+                        var optionElement = document.createElement("option");
+                        optionElement.value = option;
+                        optionElement.textContent = option;
+                        serviceDescriptionSelect.appendChild(optionElement);
+                    });
+                    break;
+                default:
+                    // Add default option
+                    var defaultOption = document.createElement("option");
+                    defaultOption.value = "";
+                    defaultOption.textContent = "Select Service Description";
+                    defaultOption.disabled = true;
+                    defaultOption.selected = true;
+                    serviceDescriptionSelect.appendChild(defaultOption);
+                    break;
+            }
+
+            // Update price based on selected service description
+            updatePrice();
+        }
+
+        function updatePrice() {
+            var serviceDescriptionSelect = document.getElementById("serviceDescription");
+            var priceInput = document.getElementById("price");
+
+            // Set price based on selected service description
+            switch (serviceDescriptionSelect.value) {
+                case "Regular Wash":
+                    priceInput.value = "60";
+                    break;
+                case "Quick Wash":
+                    priceInput.value = "40";
+                    break;
+                case "Delicate Wash":
+                    priceInput.value = "55";
+                    break;
+                case "40 minutes dry":
+                    priceInput.value = "65";
+                    break;
+                case "30 minutes dry":
+                    priceInput.value = "50";
+                    break;
+                default:
+                    priceInput.value = "";
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>
